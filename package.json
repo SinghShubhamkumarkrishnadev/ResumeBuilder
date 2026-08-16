@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "npx serve -l 3000 .",
+    "build": "echo 'Build complete: Static site ready for deployment'",
     "start": "npx serve -l 3000 .",
     "serve": "npx serve .",
     "generate:cli": "node generateResume.js"
@@ -19,11 +20,10 @@
   ],
   "author": "Singh Shubham Kumar",
   "license": "MIT",
-  "dependencies": {
-    "puppeteer": "^24.43.1",
-    "puppeteer-core": "^25.6.0"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "puppeteer": "^24.43.1",
+    "puppeteer-core": "^25.6.0",
     "serve": "^14.2.4"
   }
 }
