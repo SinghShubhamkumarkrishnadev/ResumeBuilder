@@ -1,0 +1,405 @@
+/* ==========================================================================
+   Fixed ATS A4 Resume Template Stylesheet
+   Pixel-Perfect A4 Engine with Dynamic Accents & Density Modes
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* A4 Sheet Container in Browser */
+.resume-paper {
+  --resume-accent: #1e40af;
+  --resume-accent-dark: #1e3a8a;
+  --resume-font-size: 8.65pt;
+  --resume-line-height: 1.40;
+  --resume-section-spacing: 14px;
+  --resume-entry-spacing: 9px;
+  --resume-padding: 12mm 12mm 11mm 12mm;
+
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1e293b;
+  background-color: #ffffff;
+  font-size: var(--resume-font-size);
+  line-height: var(--resume-line-height);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: var(--resume-padding);
+  box-sizing: border-box;
+  position: relative;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.18), 0 0 1px 1px rgba(0, 0, 0, 0.08);
+  border-radius: 2px;
+  transform-origin: top center;
+  transition: transform 0.15s ease-out;
+}
+
+/* Density Presets */
+.resume-paper.density-compact {
+  --resume-font-size: 8.2pt;
+  --resume-line-height: 1.32;
+  --resume-section-spacing: 10px;
+  --resume-entry-spacing: 6.5px;
+  --resume-padding: 10mm 10mm 9mm 10mm;
+}
+
+.resume-paper.density-balanced {
+  --resume-font-size: 8.65pt;
+  --resume-line-height: 1.40;
+  --resume-section-spacing: 14px;
+  --resume-entry-spacing: 9px;
+  --resume-padding: 12mm 12mm 11mm 12mm;
+}
+
+.resume-paper.density-spacious {
+  --resume-font-size: 9.0pt;
+  --resume-line-height: 1.46;
+  --resume-section-spacing: 16px;
+  --resume-entry-spacing: 11px;
+  --resume-padding: 13mm 13mm 12mm 13mm;
+}
+
+
+
+/* Visual Page 1 Boundary Marker (Only in UI Preview, never in Print) */
+.resume-paper::after {
+  content: "─── Standard A4 Single-Page Boundary (297mm) ───";
+  position: absolute;
+  top: 297mm;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 1.5px dashed rgba(239, 68, 68, 0.7);
+  font-size: 7.5pt;
+  color: #ef4444;
+  text-align: center;
+  line-height: 0;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  pointer-events: none;
+  z-index: 100;
+  display: block;
+}
+
+/* Typography Utilities */
+.resume-paper strong {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.resume-paper a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.resume-paper a:hover {
+  color: var(--resume-accent);
+  text-decoration: underline;
+}
+
+/* Header Section */
+.resume-paper .header {
+  text-align: center;
+  padding-bottom: 9px;
+  margin-bottom: var(--resume-section-spacing);
+  border-bottom: 1.5px solid var(--resume-accent-dark);
+}
+
+.resume-paper .header-name {
+  font-size: 20.5pt;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: 0.8px;
+  line-height: 1.15;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.resume-paper .header-title {
+  font-size: 9.5pt;
+  font-weight: 600;
+  color: var(--resume-accent);
+  letter-spacing: 0.25px;
+  margin-bottom: 7px;
+}
+
+.resume-paper .contact-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  row-gap: 3px;
+  column-gap: 12px;
+  font-size: 8.25pt;
+  color: #475569;
+}
+
+.resume-paper .contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.resume-paper .contact-sep {
+  color: #cbd5e1;
+  font-size: 8pt;
+}
+
+.resume-paper .contact-icon {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: var(--resume-accent);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+/* Section Styling */
+.resume-paper .section {
+  margin-bottom: var(--resume-section-spacing);
+}
+
+.resume-paper .section:last-child {
+  margin-bottom: 0;
+}
+
+.resume-paper .section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.resume-paper .section-title {
+  font-size: 9.2pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.75px;
+  color: #0f172a;
+  white-space: nowrap;
+}
+
+.resume-paper .section-line {
+  flex-grow: 1;
+  height: 1.2px;
+  background: #cbd5e1;
+}
+
+/* Professional Summary */
+.resume-paper .summary-text {
+  font-size: 8.45pt;
+  line-height: var(--resume-line-height);
+  color: #334155;
+  text-align: left;
+}
+
+/* Technical Skills */
+.resume-paper .skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.resume-paper .skill-item {
+  font-size: 8.35pt;
+  line-height: 1.36;
+  color: #334155;
+  text-align: left;
+}
+
+.resume-paper .skill-label {
+  font-weight: 600;
+  color: #0f172a;
+  margin-right: 4px;
+}
+
+.resume-paper .skill-text {
+  color: #334155;
+}
+
+/* Experience & Projects Entries */
+.resume-paper .entry {
+  margin-bottom: var(--resume-entry-spacing);
+}
+
+.resume-paper .entry:last-child {
+  margin-bottom: 0;
+}
+
+.resume-paper .entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  line-height: 1.25;
+}
+
+.resume-paper .entry-title-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.resume-paper .entry-primary {
+  font-size: 8.9pt;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.resume-paper .entry-sep {
+  color: #94a3b8;
+  font-weight: 400;
+  font-size: 8pt;
+}
+
+.resume-paper .entry-location {
+  font-size: 8.35pt;
+  color: #475569;
+  font-weight: 500;
+}
+
+.resume-paper .entry-date {
+  font-size: 8.15pt;
+  font-weight: 600;
+  color: #475569;
+  white-space: nowrap;
+}
+
+.resume-paper .entry-subheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 8.3pt;
+  margin-top: 1.5px;
+  margin-bottom: 3px;
+}
+
+.resume-paper .entry-role {
+  font-weight: 600;
+  color: var(--resume-accent);
+}
+
+.resume-paper .entry-project {
+  font-size: 8.15pt;
+  color: #475569;
+}
+
+.resume-paper .tech-stack-tag {
+  font-size: 8.3pt;
+  color: #334155;
+}
+
+.resume-paper .edu-degree {
+  font-size: 8.35pt;
+  font-weight: 600;
+  color: var(--resume-accent);
+}
+
+.resume-paper .edu-gpa {
+  font-size: 8.3pt;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Bullet Points */
+.resume-paper .bullet-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 2.5px;
+}
+
+.resume-paper .bullet-list li {
+  position: relative;
+  padding-left: 12px;
+  font-size: 8.3pt;
+  line-height: 1.38;
+  color: #334155;
+  margin-bottom: 3px;
+  text-align: left;
+}
+
+.resume-paper .bullet-list li:last-child {
+  margin-bottom: 0;
+}
+
+.resume-paper .bullet-list li::before {
+  content: "•";
+  position: absolute;
+  left: 1px;
+  top: -0.5px;
+  color: var(--resume-accent);
+  font-weight: 700;
+  font-size: 8.8pt;
+}
+
+/* Certifications & Achievements */
+.resume-paper .cert-title {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.resume-paper .cert-desc {
+  color: #334155;
+}
+
+/* ==========================================================================
+   Print Specific Rules (Pixel Perfect A4 Export)
+   ========================================================================== */
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+@media print {
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    font-size: var(--resume-font-size) !important;
+  }
+
+  /* Hide entire builder UI & visual helpers */
+  .app-header,
+  .app-sidebar,
+  .preview-toolbar,
+  .mobile-tabs,
+  .modal-overlay,
+  .toast-container,
+  .no-print,
+  .mobile-more-menu {
+    display: none !important;
+  }
+
+  .app-layout {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .preview-container {
+    padding: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  .resume-paper {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    padding: var(--resume-padding) !important;
+    transform: none !important;
+    margin: 0 auto !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  .resume-paper::after {
+    display: none !important;
+  }
+}

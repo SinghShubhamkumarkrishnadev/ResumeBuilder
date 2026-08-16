@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ATS Resume Builder | Interactive & Responsive Single-Page A4 Resume</title>
+  <meta name="description" content="Build, edit, and export single-page ATS-optimized tech resumes with live preview, AI Prompt generator, and 1-click A4 PDF export.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="styles/resume.css">
+  <link rel="stylesheet" href="styles/app.css">
+  
+  <!-- html2pdf.js for client-side PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+  <!-- Top App Navigation Bar -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <path d="M12 11l-2 3h4l-2 3" stroke-width="2.5" stroke="#fef08a"/>
+        </svg>
+      </div>
+      <div class="brand-info">
+        <h1>ATS Resume Builder</h1>
+      </div>
+      <span class="brand-badge">A4 Single Page</span>
+    </div>
+
+    <div class="header-actions">
+      <!-- Dark / Light Theme Toggle -->
+      <button id="btn-theme-toggle" class="btn btn-theme" title="Toggle Dark / Light Theme" aria-label="Toggle Theme">
+        <span id="theme-icon-display">🌙</span>
+        <span id="theme-label-display" style="font-size:0.76rem; font-weight:600;">Dark</span>
+      </button>
+
+      <!-- AI Assistant Button -->
+      <button id="btn-open-ai" class="btn btn-ai" title="Generate with ChatGPT or Claude">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        <span>AI Prompt & Fill</span>
+      </button>
+
+      <!-- Desktop Only: JSON Hub Button -->
+      <button id="btn-open-json" class="btn btn-secondary btn-desktop-only" title="Import / Export JSON">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>JSON Data</span>
+      </button>
+
+      <!-- Desktop Only: ATS Guide Button -->
+      <button id="btn-open-guide" class="btn btn-secondary btn-desktop-only" title="ATS Guide & Action Formulas">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <span>ATS Guide</span>
+      </button>
+
+      <!-- Desktop Only: Sample / Reset Menu -->
+      <button id="btn-load-sample" class="btn btn-outline btn-desktop-only" title="Load Sample Resume Data">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+        <span>Sample Data</span>
+      </button>
+
+      <!-- Download PDF Action -->
+      <button id="btn-download-pdf" class="btn btn-primary" title="Export Pixel-Perfect A4 PDF">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <span>Download PDF</span>
+      </button>
+
+      <!-- Mobile More Menu Trigger -->
+      <div class="mobile-more-menu-wrapper">
+        <button id="btn-mobile-more" class="btn btn-outline btn-icon" title="More Options">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+        </button>
+        <div id="mobile-more-dropdown" class="mobile-more-dropdown">
+          <button id="menu-item-json" class="dropdown-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            JSON Import / Export
+          </button>
+          <button id="menu-item-guide" class="dropdown-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            ATS Guide & Formulas
+          </button>
+          <button id="menu-item-sample" class="dropdown-item">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+            Load Sample Tech Resume
+          </button>
+          <button id="menu-item-reset" class="dropdown-item" style="color:var(--danger);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Reset to Blank Template
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Tab Switcher -->
+  <div class="mobile-tabs">
+    <button id="tab-btn-editor" class="mobile-tab-btn active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      Form Editor
+    </button>
+    <button id="tab-btn-preview" class="mobile-tab-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Live Preview
+    </button>
+  </div>
+
+  <!-- Main Application Layout -->
+  <div class="app-layout">
+
+    <!-- Left Sidebar: Section-by-Section Form Editor -->
+    <aside class="app-sidebar" id="app-sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Resume Sections
+        </span>
+        <div style="display: flex; gap: 8px;">
+          <button id="btn-collapse-all" class="btn btn-outline btn-icon-xs" title="Expand / Collapse All Sections">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-scroll" id="editor-accordion-container">
+
+        <!-- 0. Resume Style & Theme Customizer Card -->
+        <div class="section-card card-customizer" data-section="customizer">
+          <div class="section-card-header">
+            <div class="section-card-title">
+              <span class="section-icon" style="color:#c084fc;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+              </span>
+              <span>Resume Style & Theme</span>
+            </div>
+            <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="section-card-body">
+            <div class="customizer-row">
+              <span class="customizer-label">Accent Color Theme:</span>
+              <div class="color-swatches" id="color-swatches-container">
+                <button type="button" class="color-swatch active" data-color="#1e40af" data-dark="#1e3a8a" style="background:#1e40af;" title="Classic Navy (ATS Standard)"></button>
+                <button type="button" class="color-swatch" data-color="#0f766e" data-dark="#115e59" style="background:#0f766e;" title="Emerald Teal"></button>
+                <button type="button" class="color-swatch" data-color="#4f46e5" data-dark="#3730a3" style="background:#4f46e5;" title="Royal Indigo"></button>
+                <button type="button" class="color-swatch" data-color="#991b1b" data-dark="#7f1d1d" style="background:#991b1b;" title="Deep Crimson"></button>
+                <button type="button" class="color-swatch" data-color="#ea580c" data-dark="#c2410c" style="background:#ea580c;" title="Warm Amber"></button>
+                <button type="button" class="color-swatch" data-color="#0f172a" data-dark="#020617" style="background:#0f172a;" title="Slate Obsidian"></button>
+                <button type="button" class="color-swatch" data-color="#334155" data-dark="#1e293b" style="background:#334155;" title="Monochrome Minimal"></button>
+              </div>
+            </div>
+            <div class="customizer-row">
+              <span class="customizer-label">Spacing & Line Density:</span>
+              <div class="density-pills" id="density-pills-container">
+                <button type="button" class="density-pill" data-density="compact">Compact (Fit More)</button>
+                <button type="button" class="density-pill active" data-density="balanced">Balanced (Default)</button>
+                <button type="button" class="density-pill" data-density="spacious">Spacious</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 1. Personal & Contact Info -->
+        <div class="section-card active" data-section="personalInfo">
+          <div class="section-card-header">
+            <div class="section-card-title">
+              <span class="section-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <span>Personal & Contact Info</span>
+            </div>
+            <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="section-card-body">
+            <div class="form-group">
+              <label class="form-label">Full Name <span class="req-star">*</span></label>
+              <input type="text" id="input-name" class="input-text" placeholder="e.g. Singh Shubham Kumar" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Professional Headline / Role <span class="req-star">*</span></label>
+              <input type="text" id="input-title" class="input-text" placeholder="e.g. Full-Stack Developer | Python, Java, React" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Location <span class="req-star">*</span></label>
+                <input type="text" id="input-location" class="input-text" placeholder="e.g. Ahmedabad, Gujarat" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Phone Number <span class="req-star">*</span></label>
+                <input type="text" id="input-phone" class="input-text" placeholder="e.g. +91 70414 84034" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address <span class="req-star">*</span></label>
+              <input type="email" id="input-email" class="input-text" placeholder="e.g. your.email@example.com" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">LinkedIn URL</label>
+                <input type="url" id="input-linkedin" class="input-text" placeholder="https://linkedin.com/in/username">
+              </div>
+              <div class="form-group">
+                <label class="form-label">LinkedIn Label</label>
+                <input type="text" id="input-linkedin-label" class="input-text" placeholder="LinkedIn">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">GitHub URL</label>
+                <input type="url" id="input-github" class="input-text" placeholder="https://github.com/username">
+              </div>
+              <div class="form-group">
+                <label class="form-label">GitHub Label</label>
+                <input type="text" id="input-github-label" class="input-text" placeholder="GitHub">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Professional Summary -->
+        <div class="section-card" data-section="summary">
+          <div class="section-card-header">
+            <div class="section-card-title">
+              <span class="section-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              </span>
+              <span>Professional Summary</span>
+            </div>
+            <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="section-card-body">
+            <div class="form-group">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <label class="form-label">Summary Text <span class="req-star">*</span></label>
+                <button type="button" class="btn btn-outline" id="btn-insert-bold-summary" style="padding:2px 8px; font-size:0.72rem;">
+                  <strong>&lt;b&gt; Bold Key Tech</strong>
+                </button>
+              </div>
+              <textarea id="input-summary" class="input-textarea" rows="5" placeholder="Results-driven Developer specializing in <strong>Python</strong> and <strong>React</strong>..."></textarea>
+              <span class="helper-text">💡 Tip: Use &lt;strong&gt;text&lt;/strong&gt; or **markdown** to bold key metrics and technologies for maximum ATS score.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Technical Skills -->
+        <div class="section-card" data-section="technicalSkills">
+          <div class="section-card-header">
+            <div class="section-card-title">
+              <span class="section-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </span>
+              <span>Technical Skills</span>
+            </div>
+            <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="section-card-body">
+            <div id="skills-inputs-container" style="display:flex; flex-direction:column; gap:10px;">
+              <!-- Dynamic skill categories rendered here -->
+            </div>
+            <button type="button" id="btn-add-skill-category" class="btn btn-secondary" style="margin-top:6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Skill Category
+            </button>
+          </div>
+        </div>
+
+        <!-- 4. Work Experience -->
+        <div class="section-card" data-section="experience">
+          <div class="section-card-header">
+            <div class="section-card-title">
+              <span class="section-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </span>
+              <span>Work Experience</span>
+            </div>
+            <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="section-card-body">
+            <div id="experience-inputs-container">
+              <!-- Dynamic experience entries rendered here -->
+            </div>
+            <button type="button" id="btn-add-experience" class="btn btn-secondary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Work Experience Entry
+            </button>
+          </div>
+        </div>
+
+        <!-- 5. Projects -->
+        <div class="section-card" data-section="projects">
+          <div class="section-card-header">
+            <div class="section-card-title">
+              <span class="section-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+              </span>
+              <span>Projects</span>
+            </div>
+            <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="section-card-body">
+            <div id="projects-inputs-container">
+              <!-- Dynamic projects entries rendered here -->
+            </div>
+            <button type="button" id="btn-add-project" class="btn btn-secondary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Project Entry
+            </button>
+          </div>
+        </div>
+
+        <!-- 6. Education -->
+        <div class="section-card" data-section="education">
+          <div class="section-card-header">
+            <div class="section-card-title">
+              <span class="section-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              </span>
+              <span>Education</span>
+            </div>
+            <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="section-card-body">
+            <div id="education-inputs-container">
+              <!-- Dynamic education entries rendered here -->
+            </div>
+            <button type="button" id="btn-add-education" class="btn btn-secondary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Education Entry
+            </button>
+          </div>
+        </div>
+
+        <!-- 7. Certifications & Achievements -->
+        <div class="section-card" data-section="certifications">
+          <div class="section-card-header">
+            <div class="section-card-title">
+              <span class="section-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+              </span>
+              <span>Certifications & Achievements</span>
+            </div>
+            <svg class="chevron-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="section-card-body">
+            <div id="certifications-inputs-container">
+              <!-- Dynamic certs rendered here -->
+            </div>
+            <button type="button" id="btn-add-certification" class="btn btn-secondary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add Certification / Achievement
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- Right Canvas: Real-time Live A4 Preview -->
+    <main class="preview-pane" id="preview-pane">
+      
+      <!-- Toolbar -->
+      <div class="preview-toolbar">
+        <div class="preview-status-wrap">
+          <div class="preview-status">
+            <div class="status-dot"></div>
+            <span>Live Synchronized</span>
+          </div>
+          <!-- Single-Page A4 Height Indicator Chip -->
+          <div id="a4-height-gauge" class="page-height-gauge" title="A4 Page 1 Height Target is 297mm (1122px)">
+            <span>📏 Checking A4 height...</span>
+          </div>
+        </div>
+
+        <div class="zoom-controls">
+          <button id="btn-zoom-out" class="btn btn-outline btn-icon-xs" title="Zoom Out" style="width:30px;height:30px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <span id="zoom-value-label" class="zoom-label">85%</span>
+          <button id="btn-zoom-in" class="btn btn-outline btn-icon-xs" title="Zoom In" style="width:30px;height:30px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <button id="btn-zoom-fit" class="btn btn-outline" style="padding:4px 9px; font-size:0.75rem;">Fit Width</button>
+          <button id="btn-zoom-page" class="btn btn-outline" style="padding:4px 9px; font-size:0.75rem;">Fit Page</button>
+          <button id="btn-zoom-100" class="btn btn-outline" style="padding:4px 9px; font-size:0.75rem;">100%</button>
+          <button id="btn-print-dialog" class="btn btn-outline btn-icon-xs" title="Print Dialog" style="width:30px;height:30px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- A4 Paper Viewport Container -->
+      <div class="preview-container" id="preview-container">
+        <div class="preview-wrapper" id="preview-wrapper">
+          <!-- Rendered Resume HTML Root -->
+          <div id="resume-preview-root" class="resume-paper density-balanced">
+            <!-- Dynamically populated by JS template engine -->
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- AI Assistant Modal -->
+  <div class="modal-overlay" id="modal-ai">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          <span>AI Resume Prompt & Auto-Fill</span>
+        </div>
+        <button class="btn btn-outline btn-icon modal-close" style="width:30px;height:30px;">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.88rem; color:var(--text-secondary); line-height:1.5;">
+          Entering large amounts of career details manually is tedious! Use this pre-engineered prompt with any AI (ChatGPT, Claude, Gemini, DeepSeek). Copy the prompt below, add your rough notes or job experience at the bottom, and paste the AI's JSON output directly back here.
+        </p>
+
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:0.8rem; font-weight:700; color:var(--text-primary);">1. Copy AI Master Prompt:</span>
+          <button id="btn-copy-ai-prompt" class="btn btn-primary" style="padding:6px 14px; font-size:0.8rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            Copy Prompt
+          </button>
+        </div>
+        
+        <div class="prompt-box" id="ai-prompt-display"></div>
+
+        <div style="border-top:1px solid var(--border-color); padding-top:14px; margin-top:4px;">
+          <span style="font-size:0.8rem; font-weight:700; color:var(--text-primary); display:block; margin-bottom:8px;">2. Paste AI Response JSON Here:</span>
+          <textarea id="ai-json-input" class="input-textarea" rows="6" placeholder='Paste the JSON response from ChatGPT or Claude here...' style="font-family:var(--font-mono); font-size:0.8rem;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline modal-close">Cancel</button>
+        <button id="btn-apply-ai-json" class="btn btn-ai">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Apply AI Resume Data
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JSON Import / Export Modal -->
+  <div class="modal-overlay" id="modal-json">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>JSON Data Backup & Import</span>
+        </div>
+        <button class="btn btn-outline btn-icon modal-close" style="width:30px;height:30px;">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; gap:10px;">
+          <button id="tab-json-import" class="btn btn-primary" style="flex:1;">📥 Import JSON</button>
+          <button id="tab-json-export" class="btn btn-outline" style="flex:1;">📤 Export JSON</button>
+        </div>
+
+        <div id="json-import-view">
+          <div class="form-group">
+            <label class="form-label">Upload .json file or paste raw JSON text:</label>
+            <input type="file" id="json-file-upload" accept=".json" style="display:none;">
+            <button id="btn-trigger-upload" class="btn btn-outline" style="width:100%; border-style:dashed; padding:18px;">
+              📁 Click to Upload JSON File
+            </button>
+          </div>
+          <div class="form-group" style="margin-top:10px;">
+            <textarea id="json-import-textarea" class="input-textarea" rows="9" placeholder="Paste your resume JSON object here..." style="font-family:var(--font-mono); font-size:0.8rem;"></textarea>
+          </div>
+        </div>
+
+        <div id="json-export-view" style="display:none;">
+          <div class="form-group">
+            <label class="form-label">Current Resume JSON:</label>
+            <textarea id="json-export-textarea" class="input-textarea" rows="11" readonly style="font-family:var(--font-mono); font-size:0.8rem; background:var(--bg-primary);"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline modal-close">Close</button>
+        <button id="btn-download-json-file" class="btn btn-secondary" style="display:none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download .json
+        </button>
+        <button id="btn-submit-import-json" class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Import JSON to Editor
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATS Guide Modal -->
+  <div class="modal-overlay" id="modal-guide">
+    <div class="modal-dialog" style="max-width:760px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span>ATS Resume Guide & Formulas</span>
+        </div>
+        <button class="btn btn-outline btn-icon modal-close" style="width:30px;height:30px;">✕</button>
+      </div>
+      <div class="modal-body" id="guide-modal-content">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline modal-close">Close</button>
+        <button id="btn-print-ats-guide" class="btn btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+          Print / Save Guide PDF
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- App Main Module Logic -->
+  <script type="module" src="src/app.js"></script>
+
+</body>
+</html>

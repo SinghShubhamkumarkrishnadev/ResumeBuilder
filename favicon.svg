@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+    <linearGradient id="docGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="lightningGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#67e8f9"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Squircle Base with Border -->
+  <rect x="24" y="24" width="464" height="464" rx="110" fill="url(#bgGrad)"/>
+  <rect x="24" y="24" width="464" height="464" rx="110" stroke="url(#borderGrad)" stroke-width="8" opacity="0.85"/>
+
+  <!-- Resume Sheet Shape -->
+  <path d="M150 100 H310 L370 160 V400 C370 411 361 420 350 420 H150 C139 420 130 411 130 400 V120 C130 109 139 100 150 100 Z" 
+        fill="url(#docGrad)" stroke="#38bdf8" stroke-width="5" stroke-linejoin="round"/>
+  
+  <!-- Folded Corner -->
+  <path d="M310 100 V155 C310 158 312 160 315 160 H370 Z" 
+        fill="#334155" stroke="#38bdf8" stroke-width="4" stroke-linejoin="round"/>
+
+  <!-- Document Header Bar & Resume Lines -->
+  <rect x="165" y="145" width="110" height="14" rx="4" fill="#38bdf8" opacity="0.9"/>
+  <rect x="165" y="175" width="170" height="8" rx="3" fill="#64748b" opacity="0.6"/>
+  <rect x="165" y="195" width="140" height="8" rx="3" fill="#64748b" opacity="0.6"/>
+
+  <rect x="165" y="235" width="80" height="10" rx="3" fill="#818cf8" opacity="0.85"/>
+  <rect x="165" y="255" width="170" height="6" rx="2" fill="#475569" opacity="0.7"/>
+  <rect x="165" y="270" width="150" height="6" rx="2" fill="#475569" opacity="0.7"/>
+
+  <rect x="165" y="305" width="90" height="10" rx="3" fill="#818cf8" opacity="0.85"/>
+  <rect x="165" y="325" width="170" height="6" rx="2" fill="#475569" opacity="0.7"/>
+  <rect x="165" y="340" width="130" height="6" rx="2" fill="#475569" opacity="0.7"/>
+
+  <rect x="165" y="375" width="60" height="10" rx="3" fill="#818cf8" opacity="0.85"/>
+  <rect x="165" y="395" width="170" height="6" rx="2" fill="#475569" opacity="0.7"/>
+
+  <!-- Glowing Central AI Lightning Glyph -->
+  <path d="M280 180 L210 280 H270 L235 380 L325 260 H260 L280 180 Z" 
+        fill="url(#lightningGrad)" filter="url(#glow)" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+
+  <!-- AI Sparks / Stars -->
+  <path d="M345 205 Q345 220 330 220 Q345 220 345 235 Q345 220 360 220 Q345 220 345 205 Z" fill="url(#sparkGrad)" filter="url(#glow)"/>
+  <path d="M370 270 Q370 280 360 280 Q370 280 370 290 Q370 280 380 280 Q370 280 370 270 Z" fill="url(#sparkGrad)"/>
+</svg>

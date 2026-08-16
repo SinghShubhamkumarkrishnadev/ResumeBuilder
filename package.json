@@ -1,0 +1,29 @@
+{
+  "name": "ats-resume-builder",
+  "version": "2.0.0",
+  "description": "Interactive, responsive Single-Page A4 ATS Resume Builder web app ready for Vercel deployment with AI Prompt assistant and JSON import/export.",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve -l 3000 .",
+    "start": "npx serve -l 3000 .",
+    "serve": "npx serve .",
+    "generate:cli": "node generateResume.js"
+  },
+  "keywords": [
+    "resume-builder",
+    "ats-resume",
+    "single-page-resume",
+    "ai-resume-generator",
+    "vercel"
+  ],
+  "author": "Singh Shubham Kumar",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^24.43.1",
+    "puppeteer-core": "^25.6.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
